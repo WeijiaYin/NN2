@@ -3,6 +3,8 @@ package my.mlp;
 import java.io.IOException;
 import java.util.List;
 
+import org.jfree.data.xy.XYSeries;
+
 public class MLP {
 
 	private DataSet ds;
@@ -12,13 +14,19 @@ public class MLP {
 	private Layer inputLayer1;
 	private Layer hiddenLayer1;
 	private Layer hiddenLayer2;
+	private XYSeries mSeriesTrain;
 	
 	public MLP(String fileName) throws IOException {
 		ds = new DataSet(fileName);
 		classes = ds.getOutputClass();
+		mSeriesTrain = new XYSeries("train");
 	}
 	
-	public void test1H()
+	public XYSeries getmSeriesTrain() {
+		return mSeriesTrain;
+	}
+	
+	public double test1H()
 	{
 		List<Data> test = ds.getTestSet();
 		int sum = 0;
@@ -27,10 +35,12 @@ public class MLP {
 			sum += test1hdata(test.get(i)); 
 		}
 		System.out.println("test rate");
-		System.out.println((double)sum/test.size());
+		double rate = (double)sum/test.size();
+		System.out.println(rate);
+		return rate;
 	}
 	
-	public void test2H()
+	public double test2H()
 	{
 		List<Data> test = ds.getTestSet();
 		int sum = 0;
@@ -39,7 +49,9 @@ public class MLP {
 			sum += test2hdata(test.get(i)); 
 		}
 		System.out.println("test rate");
-		System.out.println((double)sum/test.size());
+		double rate = (double)sum/test.size();
+		System.out.println(rate);
+		return rate;
 	}
 	
 	public void train1H(int hiddenNum)
@@ -106,6 +118,7 @@ public class MLP {
 			System.out.println("error");
 			System.out.println(error[t][0]);
 			System.out.println(time);
+			mSeriesTrain.add((double)time, error[t][0]);
 		}
 		if(error[t][0] > 0.25)
 		{
@@ -140,6 +153,7 @@ public class MLP {
 			System.out.println("error");
 			System.out.println(error[t][0]);
 			System.out.println(time);
+			mSeriesTrain.add((double)time, error[t][0]);
 		}
 		if(error[t][0] > 0.25)
 		{
