@@ -16,14 +16,40 @@ public class Calculate {
 			return re;
 	}
 	
-	public static double[][] addB(double[][] matrix, double b)
+//	public static double[][] addB(double[][] matrix, double[][] b)
+//	{
+//		double[][] re = new double[matrix.length][matrix[0].length];
+//		for(int i = 0; i < re.length; i++)
+//		{
+//			for(int j = 0; j < re[0].length; j++)
+//			{
+//				re[i][j] = matrix[i][j] + b[i][0];
+//			}
+//		}
+//		return re;
+//	}
+	
+	public static double[][] multipleLr(double[][] matrix, double lr)
 	{
 		double[][] re = new double[matrix.length][matrix[0].length];
 		for(int i = 0; i < re.length; i++)
 		{
 			for(int j = 0; j < re[0].length; j++)
 			{
-				re[i][j] = matrix[i][j] + b;
+				re[i][j] = matrix[i][j] * lr;
+			}
+		}
+		return re;
+	}
+	
+	public static double[][] oneMinus(double[][] matrix)
+	{
+		double[][] re = new double[matrix.length][matrix[0].length];
+		for(int i = 0; i < re.length; i++)
+		{
+			for(int j = 0; j < re[0].length; j++)
+			{
+				re[i][j] = 1 - matrix[i][j];
 			}
 		}
 		return re;
@@ -42,14 +68,26 @@ public class Calculate {
 		return re;
 	}
 	
-	public static double[][] transpose(double[][] matrix)
+	public static double[][] minus(double[][] matrix1, double[][] matrix2)
 	{
-		double[][] re = new double[matrix.length][matrix[0].length];
+		double[][] re = new double[matrix1.length][matrix1[0].length];
 		for(int i = 0; i < re.length; i++)
 		{
 			for(int j = 0; j < re[0].length; j++)
 			{
-				re[j][i] = matrix[i][j];
+				re[i][j] = matrix1[i][j] - matrix2[i][j];
+			}
+		}
+		return re;
+	}
+	
+	public static double[][] transpose(double[][] matrix)
+	{
+		double[][] re = new double[matrix[0].length][matrix.length];
+		for(int i = 0; i < re.length; i++) {
+			for(int j = 0; j < re[0].length; j++)
+			{
+				re[i][j] = matrix[j][i];
 			}
 		}
 		return re;
@@ -72,6 +110,25 @@ public class Calculate {
 			}
 		}
 		return re;
+	}
+	
+	public static double[][] sigmoid_derivative(double[][] matrix)
+	{
+		return multiple(matrix, oneMinus(matrix));
+	}
+	
+	public static int getMax(double[][] guess)
+	{
+		double max = guess[0][0];
+		int num = 0;
+		for(int i = 1; i < guess.length; i++)
+		{
+			if(guess[i][0] > max) {
+				max = guess[i][0];
+				num = i;
+			}
+		}
+		return num;
 	}
 	
 }

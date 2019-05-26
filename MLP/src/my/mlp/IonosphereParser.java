@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class IonosphereParser {
@@ -38,50 +37,52 @@ public class IonosphereParser {
 		fileReader.close();
 	}
 	
-	public List<HashMap<String, double[]>> getTraindata(){
+	public List<Data> getTraindata(){
 		
 		output = new ArrayList<String>();
 		
 		int num = (int) (iono.size() * 0.75);
 		
-		List<HashMap<String,double[]>> list = new ArrayList<HashMap<String, double[]>>();
+		List<Data> list = new ArrayList<Data>();
 		
 		for(int i = 0; i < num; i++)
 		{
-			HashMap<String, double[]> hm = new HashMap<String, double[]>();
+			Data d = new Data();
 			String[] line = iono.get(i).split(",");
-			if(!output.contains(line[0]))
-				output.add(line[0]);
+			if(!output.contains(line[line.length-1]))
+				output.add(line[line.length-1]);
 			double[] par = new double[line.length-1];
 			for(int j = 0; j < line.length-1; j++)
 			{
 				par[j] = Double.valueOf(line[j]);
 			}
-			hm.put(line[line.length -1], par);
-			list.add(hm);
+			d.setData(par);
+			d.setTarget(line[line.length-1]);
+			list.add(d);
 		}
 		
 		return list;
 	}
 	
-public List<HashMap<String, double[]>> getTestdata(){
+public List<Data> getTestdata(){
 		
 		int num = (int) (iono.size() * 0.75);
 		int start = iono.size() - num;
 		
-		List<HashMap<String,double[]>> list = new ArrayList<HashMap<String, double[]>>();
+		List<Data> list = new ArrayList<Data>();
 		
 		for(int i = start; i < iono.size(); i++)
 		{
-			HashMap<String, double[]> hm = new HashMap<String, double[]>();
+			Data d = new Data();
 			String[] line = iono.get(i).split(",");
 			double[] par = new double[line.length-1];
 			for(int j = 0; j < line.length - 1; j++)
 			{
 				par[j] = Double.valueOf(line[j]);
 			}
-			hm.put(line[line.length - 1], par);
-			list.add(hm);
+			d.setData(par);
+			d.setTarget(line[line.length - 1]);
+			list.add(d);
 		}
 		
 		return list;

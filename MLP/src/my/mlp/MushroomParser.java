@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MushroomParser {
@@ -39,50 +38,55 @@ public class MushroomParser {
 		fileReader.close();
 	}
 	
-	public List<HashMap<String, double[]>> getTraindata(){
+	public List<Data> getTraindata(){
 		
 		output = new ArrayList<String>();
 		
 		int num = (int) (mushroom.size() * 0.75);
 		
-		List<HashMap<String,double[]>> list = new ArrayList<HashMap<String, double[]>>();
+		List<Data> list = new ArrayList<Data>();
 		
 		for(int i = 0; i < num; i++)
 		{
-			HashMap<String, double[]> hm = new HashMap<String, double[]>();
+			Data d = new Data();
 			String[] line = mushroom.get(i).split(",");
 			if(!output.contains(line[0]))
 				output.add(line[0]);
 			double[] par = new double[line.length-1];
 			for(int j = 1; j < line.length; j++)
 			{
-				par[j-1] = Double.valueOf(line[j].getBytes()[0]-'a');
+				if(line[j].equals("?"))
+					par[j-1] = 0;
+				else
+					par[j-1] = Double.valueOf(line[j].getBytes()[0]-'a');
 			}
-			hm.put(line[0], par);
-			list.add(hm);
+			d.setData(par);
+			d.setTarget(line[0]);
+			list.add(d);
 		}
 		
 		return list;
 	}
 	
-public List<HashMap<String, double[]>> getTestdata(){
+public List<Data> getTestdata(){
 		
 		int num = (int) (mushroom.size() * 0.75);
 		int start = mushroom.size() - num;
 		
-		List<HashMap<String,double[]>> list = new ArrayList<HashMap<String, double[]>>();
+		List<Data> list = new ArrayList<Data>();
 		
 		for(int i = start; i < mushroom.size(); i++)
 		{
-			HashMap<String, double[]> hm = new HashMap<String, double[]>();
+			Data d = new Data();
 			String[] line = mushroom.get(i).split(",");
 			double[] par = new double[line.length-1];
 			for(int j = 1; j < line.length; j++)
 			{
 				par[j-1] = Double.valueOf(line[j].getBytes()[0]-'a');
 			}
-			hm.put(line[0], par);
-			list.add(hm);
+			d.setTarget(line[0]);
+			d.setData(par);
+			list.add(d);
 		}
 		
 		return list;
