@@ -39,24 +39,24 @@ public class MushroomParser {
 		fileReader.close();
 	}
 	
-	public List<HashMap<String, float[]>> getTraindata(){
+	public List<HashMap<String, double[]>> getTraindata(){
 		
 		output = new ArrayList<String>();
 		
 		int num = (int) (mushroom.size() * 0.75);
 		
-		List<HashMap<String,float[]>> list = new ArrayList<HashMap<String, float[]>>();
+		List<HashMap<String,double[]>> list = new ArrayList<HashMap<String, double[]>>();
 		
 		for(int i = 0; i < num; i++)
 		{
-			HashMap<String, float[]> hm = new HashMap<String, float[]>();
+			HashMap<String, double[]> hm = new HashMap<String, double[]>();
 			String[] line = mushroom.get(i).split(",");
 			if(!output.contains(line[0]))
 				output.add(line[0]);
-			float[] par = new float[line.length-1];
+			double[] par = new double[line.length-1];
 			for(int j = 1; j < line.length; j++)
 			{
-				par[j-1] = Float.valueOf(line[j].getBytes()[0]-'a');
+				par[j-1] = Double.valueOf(line[j].getBytes()[0]-'a');
 			}
 			hm.put(line[0], par);
 			list.add(hm);
@@ -65,21 +65,21 @@ public class MushroomParser {
 		return list;
 	}
 	
-public List<HashMap<String, float[]>> getTestdata(){
+public List<HashMap<String, double[]>> getTestdata(){
 		
 		int num = (int) (mushroom.size() * 0.75);
 		int start = mushroom.size() - num;
 		
-		List<HashMap<String,float[]>> list = new ArrayList<HashMap<String, float[]>>();
+		List<HashMap<String,double[]>> list = new ArrayList<HashMap<String, double[]>>();
 		
 		for(int i = start; i < mushroom.size(); i++)
 		{
-			HashMap<String, float[]> hm = new HashMap<String, float[]>();
+			HashMap<String, double[]> hm = new HashMap<String, double[]>();
 			String[] line = mushroom.get(i).split(",");
-			float[] par = new float[line.length-1];
+			double[] par = new double[line.length-1];
 			for(int j = 1; j < line.length; j++)
 			{
-				par[j-1] = Float.valueOf(line[j].getBytes()[0]-'a');
+				par[j-1] = Double.valueOf(line[j].getBytes()[0]-'a');
 			}
 			hm.put(line[0], par);
 			list.add(hm);
