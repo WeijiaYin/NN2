@@ -67,7 +67,7 @@ public class IonosphereParser {
 public List<Data> getTestdata(){
 		
 		int num = (int) (iono.size() * 0.75);
-		int start = iono.size() - num;
+		int start = num + 1;
 		
 		List<Data> list = new ArrayList<Data>();
 		

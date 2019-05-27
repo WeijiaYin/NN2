@@ -15,15 +15,23 @@ public class MLP {
 	private Layer hiddenLayer1;
 	private Layer hiddenLayer2;
 	private XYSeries mSeriesTrain;
+	private XYSeries mSeriesTest;
+	private double trainError = 0;
+	private double testError = 0;
 	
 	public MLP(String fileName) throws IOException {
 		ds = new DataSet(fileName);
 		classes = ds.getOutputClass();
 		mSeriesTrain = new XYSeries("train");
+		mSeriesTest = new XYSeries("test");
 	}
 	
 	public XYSeries getmSeriesTrain() {
 		return mSeriesTrain;
+	}
+	
+	public XYSeries getmSeriesTest() {
+		return mSeriesTest;
 	}
 	
 	public double test1H()
@@ -32,7 +40,13 @@ public class MLP {
 		int sum = 0;
 		for(int i = 0; i < test.size(); i++)
 		{
-			sum += test1hdata(test.get(i)); 
+			int correct = test1hdata(test.get(i));
+			if(correct == 0)
+			{
+				testError++;
+			}
+			mSeriesTest.add((double)i, testError/((double)i+1));
+			sum += correct;
 		}
 		System.out.println("test rate");
 		double rate = (double)sum/test.size();
@@ -46,7 +60,13 @@ public class MLP {
 		int sum = 0;
 		for(int i = 0; i < test.size(); i++)
 		{
-			sum += test2hdata(test.get(i)); 
+			int correct = test2hdata(test.get(i));
+			if(correct == 0)
+			{
+				testError++;
+			}
+			mSeriesTest.add((double)i, testError/((double)i+1));
+			sum += correct;
 		}
 		System.out.println("test rate");
 		double rate = (double)sum/test.size();
@@ -96,7 +116,7 @@ public class MLP {
 		}
 	}
 	
-	public double[][] feedForward1(Layer inputLayer, Layer hiddenLayer, Data data, int time, int p)
+	private double[][] feedForward1(Layer inputLayer, Layer hiddenLayer, Data data, int time, int p)
 	{
 		inputLayer.setInput(data.getData());
 		hiddenLayer.setInput(inputLayer.getOutput());
@@ -118,7 +138,12 @@ public class MLP {
 			System.out.println("error");
 			System.out.println(error[t][0]);
 			System.out.println(time);
-			mSeriesTrain.add((double)time, error[t][0]);
+			
+			int num = Calculate.getMax(guess);
+			if(!classes.get(num).equals(data.getTarget())) 
+				trainError++;
+			
+			mSeriesTrain.add((double)time, trainError/((double)time+1));
 		}
 		if(error[t][0] > 0.25)
 		{
@@ -130,7 +155,7 @@ public class MLP {
 	}
 	
 	
-	public double[][] feedForward2(Layer inputLayer1, Layer hiddenLayer1, Layer hiddenLayer2, Data data, int time, int p)
+	private double[][] feedForward2(Layer inputLayer1, Layer hiddenLayer1, Layer hiddenLayer2, Data data, int time, int p)
 	{
 		inputLayer1.setInput(data.getData());
 		hiddenLayer1.setInput(inputLayer1.getOutput());
@@ -153,7 +178,11 @@ public class MLP {
 			System.out.println("error");
 			System.out.println(error[t][0]);
 			System.out.println(time);
-			mSeriesTrain.add((double)time, error[t][0]);
+			int num = Calculate.getMax(guess);
+			if(!classes.get(num).equals(data.getTarget())) 
+				trainError++;
+			
+			mSeriesTrain.add((double)time, trainError/((double)time+1));
 		}
 		if(error[t][0] > 0.25)
 		{
@@ -164,7 +193,7 @@ public class MLP {
 		
 	}
 	
-	public void backProp1(Layer inputLayer, Layer hiddenLayer, double[][] error, int time)
+	private void backProp1(Layer inputLayer, Layer hiddenLayer, double[][] error, int time)
 	{
 		double lr = 0.01/(1+0.001*time);
 		double[][] deltawh = Calculate.multiple(Calculate.multiple(Calculate.multipleLr(error, lr), Calculate.sigmoid_derivative(hiddenLayer.getOutput())), Calculate.transpose(hiddenLayer.getInput()));
@@ -185,7 +214,7 @@ public class MLP {
 		inputLayer.setB(bi);
 	}
 	
-	public void backProp2(Layer inputLayer1, Layer hiddenLayer1, Layer hiddenLayer2, double[][] error, int time)
+	private void backProp2(Layer inputLayer1, Layer hiddenLayer1, Layer hiddenLayer2, double[][] error, int time)
 	{
 		double lr = 0.01/(1+0.001*time);
 		double[][] deltawh2 = Calculate.multiple(Calculate.multiple(Calculate.multipleLr(error, lr), Calculate.sigmoid_derivative(hiddenLayer2.getOutput())), Calculate.transpose(hiddenLayer2.getInput()));
@@ -215,7 +244,7 @@ public class MLP {
 		inputLayer1.setB(bi);
 	}
 	
-	public int test1hdata(Data data)
+	private int test1hdata(Data data)
 	{
 		inputLayer.setInput(data.getData());
 		hiddenLayer.setInput(inputLayer.getOutput());
@@ -227,7 +256,7 @@ public class MLP {
 			return 0;
 	}
 	
-	public int test2hdata(Data data)
+	private int test2hdata(Data data)
 	{
 		inputLayer1.setInput(data.getData());
 		hiddenLayer1.setInput(inputLayer1.getOutput());

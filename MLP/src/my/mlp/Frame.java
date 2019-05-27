@@ -14,11 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
@@ -190,6 +188,7 @@ public class Frame extends JFrame {
 				
 				XYSeriesCollection mCollection = new XYSeriesCollection();
 				mCollection.addSeries(mlp.getmSeriesTrain());
+				mCollection.addSeries(mlp.getmSeriesTest());
 				
 		        JFreeChart chart = ChartFactory.createXYLineChart("learning curve", "X", "Y", mCollection, PlotOrientation.VERTICAL,  
 		                true, true, false);  

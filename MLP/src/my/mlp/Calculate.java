@@ -16,19 +16,6 @@ public class Calculate {
 			return re;
 	}
 	
-//	public static double[][] addB(double[][] matrix, double[][] b)
-//	{
-//		double[][] re = new double[matrix.length][matrix[0].length];
-//		for(int i = 0; i < re.length; i++)
-//		{
-//			for(int j = 0; j < re[0].length; j++)
-//			{
-//				re[i][j] = matrix[i][j] + b[i][0];
-//			}
-//		}
-//		return re;
-//	}
-	
 	public static double[][] multipleLr(double[][] matrix, double lr)
 	{
 		double[][] re = new double[matrix.length][matrix[0].length];

@@ -72,7 +72,7 @@ public class WineParser {
 public List<Data> getTestdata(){
 		
 		int num = (int) (wine.size() * 0.75);
-		int start = wine.size() - num;
+		int start = num + 1;
 		
 		List<Data> list = new ArrayList<Data>();
 		

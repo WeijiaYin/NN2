@@ -71,7 +71,7 @@ public class MushroomParser {
 public List<Data> getTestdata(){
 		
 		int num = (int) (mushroom.size() * 0.75);
-		int start = mushroom.size() - num;
+		int start = num + 1;
 		
 		List<Data> list = new ArrayList<Data>();
 		
