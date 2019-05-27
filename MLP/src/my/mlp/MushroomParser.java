@@ -58,7 +58,7 @@ public class MushroomParser {
 				if(line[j].equals("?"))
 					par[j-1] = 0;
 				else
-					par[j-1] = Double.valueOf(line[j].getBytes()[0]-'a');
+					par[j-1] = Double.valueOf(line[j].getBytes()[0]-'a') + 1.0;
 			}
 			d.setData(par);
 			d.setTarget(line[0]);
