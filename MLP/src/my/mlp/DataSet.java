@@ -7,6 +7,7 @@ public class DataSet {
 
 	private List<Data> trainSet;
 	private List<Data> testSet;
+	private List<Data> valueSet;
 	private List<String> outputClass;
 	private int inputNum;
 	private int outputNum;
@@ -17,6 +18,10 @@ public class DataSet {
 
 	public List<Data> getTestSet() {
 		return testSet;
+	}
+	
+	public List<Data> getValueSet() {
+		return valueSet;
 	}
 
 	public List<String> getOutputClass() {
@@ -37,6 +42,7 @@ public class DataSet {
 		case "agaricus-lepiota.data":
 			MushroomParser mr = new MushroomParser(dataSet);
 			trainSet = mr.getTraindata();
+			valueSet = mr.getValuedata();
 			testSet = mr.getTestdata();
 			outputClass = mr.getOutput();
 			outputNum = outputClass.size();
@@ -45,6 +51,7 @@ public class DataSet {
 		case "wine.data":
 			WineParser w = new WineParser(dataSet);
 			trainSet = w.getTraindata();
+			valueSet = w.getValuedata();
 			testSet = w.getTestdata();
 			outputClass = w.getOutput();
 			outputNum = outputClass.size();
@@ -53,6 +60,7 @@ public class DataSet {
 		case "ionosphere.data":
 			IonosphereParser iono = new IonosphereParser(dataSet);
 			trainSet = iono.getTraindata();
+			valueSet = iono.getValuedata();
 			testSet = iono.getTestdata();
 			outputClass = iono.getOutput();
 			outputNum = outputClass.size();

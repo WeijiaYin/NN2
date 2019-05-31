@@ -70,12 +70,13 @@ public class MushroomParser {
 	
 public List<Data> getTestdata(){
 		
-		int num = (int) (mushroom.size() * 0.75);
+		int num = (int) (mushroom.size() * 0.5);
 		int start = num + 1;
+		int end = (int) (mushroom.size() * 0.75);
 		
 		List<Data> list = new ArrayList<Data>();
 		
-		for(int i = start; i < mushroom.size(); i++)
+		for(int i = start; i < end; i++)
 		{
 			Data d = new Data();
 			String[] line = mushroom.get(i).split(",");
@@ -91,5 +92,29 @@ public List<Data> getTestdata(){
 		
 		return list;
 	}
+
+public List<Data> getValuedata(){
+	
+	int num = (int) (mushroom.size() * 0.75);
+	int start = num + 1;
+	
+	List<Data> list = new ArrayList<Data>();
+	
+	for(int i = start; i < mushroom.size(); i++)
+	{
+		Data d = new Data();
+		String[] line = mushroom.get(i).split(",");
+		double[] par = new double[line.length-1];
+		for(int j = 1; j < line.length; j++)
+		{
+			par[j-1] = Double.valueOf(line[j].getBytes()[0]-'a');
+		}
+		d.setTarget(line[0]);
+		d.setData(par);
+		list.add(d);
+	}
+	
+	return list;
+}
 	
 }

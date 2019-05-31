@@ -71,12 +71,13 @@ public class WineParser {
 	
 public List<Data> getTestdata(){
 		
-		int num = (int) (wine.size() * 0.75);
+		int num = (int) (wine.size() * 0.5);
 		int start = num + 1;
+		int end = (int) (wine.size() * 0.75);
 		
 		List<Data> list = new ArrayList<Data>();
 		
-		for(int i = start; i < wine.size(); i++)
+		for(int i = start; i < end; i++)
 		{
 			Data d = new Data();
 			String[] line = wine.get(i).split(",");
@@ -92,4 +93,28 @@ public List<Data> getTestdata(){
 		
 		return list;
 	}
+
+public List<Data> getValuedata(){
+	
+	int num = (int) (wine.size() * 0.75);
+	int start = num + 1;
+	
+	List<Data> list = new ArrayList<Data>();
+	
+	for(int i = start; i < wine.size(); i++)
+	{
+		Data d = new Data();
+		String[] line = wine.get(i).split(",");
+		double[] par = new double[line.length-1];
+		for(int j = 1; j < line.length; j++)
+		{
+			par[j-1] = Double.valueOf(line[j]);
+		}
+		d.setData(par);
+		d.setTarget(line[0]);
+		list.add(d);
+	}
+	
+	return list;
+}
 }

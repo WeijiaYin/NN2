@@ -41,7 +41,7 @@ public class IonosphereParser {
 		
 		output = new ArrayList<String>();
 		
-		int num = (int) (iono.size() * 0.75);
+		int num = (int) (iono.size() * 0.5);
 		
 		List<Data> list = new ArrayList<Data>();
 		
@@ -66,12 +66,13 @@ public class IonosphereParser {
 	
 public List<Data> getTestdata(){
 		
-		int num = (int) (iono.size() * 0.75);
+		int num = (int) (iono.size() * 0.5);
 		int start = num + 1;
+		int end = (int) (iono.size() * 0.75);
 		
 		List<Data> list = new ArrayList<Data>();
 		
-		for(int i = start; i < iono.size(); i++)
+		for(int i = start; i < end; i++)
 		{
 			Data d = new Data();
 			String[] line = iono.get(i).split(",");
@@ -87,5 +88,29 @@ public List<Data> getTestdata(){
 		
 		return list;
 	}
+
+public List<Data> getValuedata(){
+	
+	int num = (int) (iono.size() * 0.75);
+	int start = num + 1;
+	
+	List<Data> list = new ArrayList<Data>();
+	
+	for(int i = start; i < iono.size(); i++)
+	{
+		Data d = new Data();
+		String[] line = iono.get(i).split(",");
+		double[] par = new double[line.length-1];
+		for(int j = 0; j < line.length - 1; j++)
+		{
+			par[j] = Double.valueOf(line[j]);
+		}
+		d.setData(par);
+		d.setTarget(line[line.length - 1]);
+		list.add(d);
+	}
+	
+	return list;
+}
 	
 }
