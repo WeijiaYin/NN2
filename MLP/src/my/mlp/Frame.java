@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JTextArea;
 
 public class Frame extends JFrame {
 
@@ -127,40 +129,48 @@ public class Frame extends JFrame {
 		panel.add(panel_1);
 		
 		JLabel lblHiddenlayer = new JLabel("hiddenLayer1");
-		lblHiddenlayer.setBounds(290, 36, 81, 15);
+		lblHiddenlayer.setBounds(169, 36, 81, 15);
 		panel.add(lblHiddenlayer);
 		
 		textField = new JTextField();
-		textField.setBounds(382, 33, 66, 21);
+		textField.setBounds(273, 33, 66, 21);
 		panel.add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblHiddenlayer_1 = new JLabel("hiddenLayer2");
-		lblHiddenlayer_1.setBounds(290, 80, 81, 15);
+		lblHiddenlayer_1.setBounds(169, 80, 81, 15);
 		panel.add(lblHiddenlayer_1);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(382, 77, 66, 21);
+		textField_1.setBounds(273, 77, 66, 21);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
 		
 		JLabel lblCorrectRateOn = new JLabel("correct rate on test:");
-		lblCorrectRateOn.setBounds(482, 57, 133, 15);
+		lblCorrectRateOn.setBounds(273, 125, 133, 15);
 		panel.add(lblCorrectRateOn);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(632, 57, 94, 15);
+		lblNewLabel.setBounds(416, 129, 94, 15);
 		panel.add(lblNewLabel);
 		
 		JButton btnOk = new JButton("ok");
-		btnOk.setBounds(290, 121, 81, 23);
+		btnOk.setBounds(169, 121, 81, 23);
 		panel.add(btnOk);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(553, 10, 241, 134);
+		panel.add(textArea);
+		
+		textArea.setLineWrap(true);
+		textArea.setEditable(false);
 		
 		btnOk.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+				textArea.setText("");
 				panel_1.removeAll();
 				if(textField_1.getText().equals("0")) {
 					try {
@@ -188,7 +198,7 @@ public class Frame extends JFrame {
 				
 				XYSeriesCollection mCollection = new XYSeriesCollection();
 				mCollection.addSeries(mlp.getmSeriesTrain());
-				mCollection.addSeries(mlp.getmSeriesTest());
+				mCollection.addSeries(mlp.getmSeriesValue());
 				
 		        JFreeChart chart = ChartFactory.createXYLineChart("learning curve", "X", "Y", mCollection, PlotOrientation.VERTICAL,  
 		                true, true, false);  
@@ -196,6 +206,25 @@ public class Frame extends JFrame {
 		        
 				ChartPanel cp = new ChartPanel(chart);
 				panel_1.add(cp);
+				
+				textArea.removeAll();
+				
+				List<String> classes = mlp.getClasses();
+				for(int i = 0; i < classes.size(); i++)
+				{
+					textArea.append("   " + classes.get(i)+" ");
+				}
+				textArea.append("\r\n");
+				int[][] confuseMatrix = mlp.getConfuseMatrix();
+				for(int i = 0; i < confuseMatrix.length; i++)
+				{
+					textArea.append(classes.get(i) + " ");
+					for(int j = 0; j < confuseMatrix[i].length; j++)
+					{
+						textArea.append(confuseMatrix[i][j]+" ");
+					}
+					textArea.append("\r\n");
+				}
 			}
 			
 		});
