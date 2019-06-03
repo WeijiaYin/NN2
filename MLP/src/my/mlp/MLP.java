@@ -80,7 +80,7 @@ public class MLP {
 			}
 		}
 		double rate = (double) valueError / value.size();
-		mSeriesValue.add((double)time, rate);
+		mSeriesValue.add(time, rate);
 		valueError = 0;
 		return rate;
 	}
@@ -115,7 +115,7 @@ public class MLP {
 			}
 		}
 		double rate = (double) valueError / value.size();
-		mSeriesValue.add((double)time, rate);
+		mSeriesValue.add(time, rate);
 		valueError = 0;
 		return rate;
 	}
@@ -136,19 +136,19 @@ public class MLP {
 				double[][] err = feedForward1(inputLayer, hiddenLayer, train.get(i), i);
 				backProp1(inputLayer, hiddenLayer, err, i);
 			}
-			mSeriesTrain.add((double)j, trainError/ train.size());
+			mSeriesTrain.add(j, trainError/ train.size());
 			double valueRate = value1H(j);
-			if(valueRate >= lastValueRate)
+			if(j > 4)
 			{
-				if(valueRate < 0.4) {
+				if(valueRate >= lastValueRate) {
 					inputLayer.setWeight(previousIWeightMatrix);
 					hiddenLayer.setWeight(previousH1WeightMatrix);
 					break;
 				}
 			}
-			else {
+//			else {
 				lastValueRate = valueRate;
-			}
+//			}
 			trainError = 0;
 			j++;
 			
@@ -175,19 +175,20 @@ public class MLP {
 				double[][] err = feedForward2(inputLayer1, hiddenLayer1, hiddenLayer2, train.get(i), i);
 				backProp2(inputLayer1, hiddenLayer1, hiddenLayer2, err, i);
 			}
-			mSeriesTrain.add((double)j, trainError/ train.size());
+			mSeriesTrain.add(j, trainError/ train.size());
 			double valueRate = value2H(j);
-			if(valueRate >= lastValueRate)
+			if(j > 4)
 			{
-				if(valueRate < 0.4) {
+				if(valueRate >= lastValueRate) {
 					inputLayer1.setWeight(previousIWeightMatrix);
 					hiddenLayer1.setWeight(previousH1WeightMatrix);
 					hiddenLayer2.setWeight(previousH2WeightMatrix);
 					break;
 				}
-			}else {
-				lastValueRate = valueRate;
 			}
+//			}else {
+				lastValueRate = valueRate;
+//			}
 			trainError = 0;
 			j++;
 		}
@@ -250,7 +251,7 @@ public class MLP {
 	}
 
 	private void backProp1(Layer inputLayer, Layer hiddenLayer, double[][] error, int time) {
-		double lr = 0.01 / (1 + 0.001 * time);
+		double lr = 0.25 / (1 + 0.001 * time);
 		double[][] deltawh = Calculate.multiple(
 				Calculate.multiple(Calculate.multipleLr(error, lr),
 						Calculate.sigmoid_derivative(hiddenLayer.getOutput())),
